@@ -1,7 +1,5 @@
 # Android build
 
-The project now has an Android NativeActivity entry point and APK metadata.
-
 ## App identity
 
 - Application ID: com.discord.rust
@@ -12,25 +10,23 @@ The project now has an Android NativeActivity entry point and APK metadata.
 
 ## Build with cargo-apk
 
-Install Rust, the Android SDK and NDK, then install the Android Rust target and APK builder:
+Install Rust, the Android SDK and NDK, then install the Android target and APK builder:
 
     rustup target add aarch64-linux-android
     cargo install cargo-apk
 
-Set ANDROID_HOME and NDK_HOME to your installed SDK and NDK directories. Then run from the repository root:
+Set ANDROID_HOME and NDK_HOME to the installed SDK and NDK directories. From the repository root:
 
     cargo apk build --release --lib
 
-The generated APK is placed under target/android-artifacts/release/apk/.
+The workflow currently verifies the output at:
 
-## Build from GitHub Actions
+    target/release/apk/discord-rust.apk
 
-The Android APK workflow builds the arm64 APK on GitHub and uploads it as a workflow artifact. Open the repository's Actions tab, select the latest successful run, and download the discord-rust-arm64-apk artifact.
+## GitHub Actions
 
-## Termux note
-
-The Rust source is Android-ready, but a local Termux build still needs a compatible Android NDK toolchain and SDK setup. The GitHub Actions build is the easiest first APK route and avoids installing the full Android toolchain on the phone.
+The workflow in .github/workflows/android.yml builds the ARM64 APK on GitHub and uploads it as the discord-rust-arm64-build artifact. It restores the existing release keystore from the ANDROID_KEYSTORE_BASE64 and ANDROID_KEYSTORE_PASSWORD repository secrets. Keep both secrets private and preserve the keystore for future updates.
 
 ## Current limitations
 
-This is still a UI prototype. It does not sign users in, connect to Discord Gateway, or send real messages. Use Discord-supported OAuth2 and API access; never put account tokens or signing secrets in source control.
+The application launches a Rust/egui interface with local preview messages. It is not yet connected to Discord. The official APK is not a source project and cannot be converted wholesale into Rust; this repository implements its own client. Use supported Discord OAuth2 and application/bot API features only. Discord does not expose a general-purpose OAuth user-account endpoint for reading and sending ordinary user messages.

@@ -1,30 +1,33 @@
 # Discord-Rust
 
-An Android-first Rust client prototype using egui/eframe.
+An Android-first, native Rust chat client prototype inspired by familiar Discord mobile navigation.
 
-## Current status
+## Project direction
 
-- Rust UI prototype with a Discord-inspired dark theme
-- Desktop layout with server rail, channel list, chat and member panel
-- Narrow-screen Android layout with compact server and channel navigation
+The goal is a lightweight Android client with a familiar server/channel/chat layout and performance-conscious Rust code. The uploaded Discord APK is used only as a visual and behavioural reference; this repository does not embed, patch, decompile, or redistribute Discord's proprietary application code or assets.
+
+## Current implementation
+
+- Rust application shell using eframe/egui
 - Android NativeActivity entry point
-- APK metadata for com.discord.rust
-- GitHub Actions workflow for an arm64 Android APK
+- ARM64 Android package metadata (com.discord.rust)
+- Responsive mobile layout with server strip, channel drawer, chat view, and bottom navigation
+- Desktop preview with server rail, channel list, chat, and member list
+- Local preview messages and message composer (not connected to Discord)
+- GitHub Actions release APK workflow
 
-## Build desktop preview
+## Build
 
-    cargo run
+Desktop preview: cargo run
 
-## Build Android APK
+Android APK: cargo apk build --release --lib
 
-See docs/ANDROID_BUILD.md. The quickest option is the Android APK workflow in the Actions tab.
+The GitHub Actions workflow builds the ARM64 APK. See docs/ANDROID_BUILD.md.
 
-## Package
+## Discord connectivity
 
-- Display name: Discord Rust
-- Application ID: com.discord.rust
-- ABI: arm64-v8a
+This project does not currently sign in to Discord or exchange live messages. Discord's supported OAuth2/API surface does not provide a general-purpose user-account chat API for third-party clients. OAuth2 identity scopes can support sign-in/profile features; bot and app functionality must use the documented bot/application APIs and permissions. Do not use personal account tokens, self-bot automation, or private undocumented endpoints.
 
-## Important
+## Status
 
-This repository contains an independent implementation, not Discord's proprietary source code or APK. It is not affiliated with Discord. The current app is a visual prototype and does not yet connect to Discord accounts or live chat. Future connectivity must use supported Discord OAuth2/API features, not personal user tokens or self-bot automation.
+The UI is an early native Rust foundation, not a complete Discord replacement. Networking, account authorization, persistent local state, attachments, voice, notifications, and real-time message sync remain unimplemented.
