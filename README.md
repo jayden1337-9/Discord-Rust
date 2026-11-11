@@ -1,54 +1,30 @@
 # Discord-Rust
 
-An Android-first Rust client project. The current code is an **interface prototype**:
-it recreates a familiar Discord-style layout using Rust and egui, but it is not yet
-connected to Discord accounts or live chat.
+An Android-first Rust client prototype using egui/eframe.
 
-## Current features
+## Current status
 
-- Dark chat layout with server rail, channel list, message timeline and member panel
-- Channel switching and local message composer prototype
-- Modular Rust UI code
+- Rust UI prototype with a Discord-inspired dark theme
+- Desktop layout with server rail, channel list, chat and member panel
+- Narrow-screen Android layout with compact server and channel navigation
+- Android NativeActivity entry point
+- APK metadata for com.discord.rust
+- GitHub Actions workflow for an arm64 Android APK
 
-## Build a desktop preview
+## Build desktop preview
 
-Install Rust, then run:
+    cargo run
 
-```sh
-cargo run
-```
+## Build Android APK
 
-## Android status
+See docs/ANDROID_BUILD.md. The quickest option is the Android APK workflow in the Actions tab.
 
-This first commit is a desktop egui preview, not a finished Android APK. Android
-entry-point integration, NDK packaging, signing, and device testing are still
-required. See [Android build notes](docs/ANDROID_BUILD.md).
+## Package
 
-## Discord connectivity
+- Display name: Discord Rust
+- Application ID: com.discord.rust
+- ABI: arm64-v8a
 
-Use Discord's documented OAuth2 and bot-supported API functionality. Do not use
-personal user tokens or automate a normal user account as a self-bot. Discord's
-API does not provide a supported way for an independent third-party client to
-reproduce every feature of the official mobile app.
+## Important
 
-## Package target
-
-Planned Android application ID: `com.discord.rust`.
-
-## Layout
-
-```text
-src/
-  main.rs
-  app.rs
-  theme.rs
-  ui/
-    mod.rs
-    servers.rs
-    channels.rs
-    chat.rs
-    members.rs
-```
-
-The repository contains no Discord APK, proprietary source code, or copied
-Discord artwork. Use original assets or assets you have permission to use.
+This repository contains an independent implementation, not Discord's proprietary source code or APK. It is not affiliated with Discord. The current app is a visual prototype and does not yet connect to Discord accounts or live chat. Future connectivity must use supported Discord OAuth2/API features, not personal user tokens or self-bot automation.
