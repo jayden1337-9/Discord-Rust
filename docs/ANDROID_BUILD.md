@@ -19,7 +19,7 @@ Install Rust, the Android SDK and NDK, then install the Android Rust target and 
 
 Set ANDROID_HOME and NDK_HOME to your installed SDK and NDK directories. Then run from the repository root:
 
-    cargo apk build --release
+    cargo apk build --release --lib
 
 The generated APK is placed under target/android-artifacts/release/apk/.
 
