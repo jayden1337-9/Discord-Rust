@@ -1,0 +1,10 @@
+[package]
+name = "discord-rust"
+version = "0.1.0"
+edition = "2021"
+description = "An Android-first Rust Discord-style client prototype"
+license = "MIT"
+
+[dependencies]
+eframe = { version = "0.31", features = ["glow"] }
+egui = "0.31"
