@@ -71,11 +71,17 @@ jobs:
           CARGO_APK_RELEASE_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
         run: cargo apk build --release --lib
 
+      - name: Verify APK output
+        shell: bash
+        run: |
+          ls -lh target/release/apk/*.apk
+          test -s target/release/apk/discord-rust.apk
+
       - name: Upload APK and release keystore
         uses: actions/upload-artifact@v4
         with:
           name: discord-rust-arm64-build
           path: |
-            target/android-artifacts/release/apk/*.apk
+            target/release/apk/*.apk
             discord-rust.jks
           if-no-files-found: error
