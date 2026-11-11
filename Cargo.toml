@@ -1,10 +1,35 @@
 [package]
 name = "discord-rust"
-version = "0.1.0"
+version = "0.2.0"
 edition = "2021"
 description = "An Android-first Rust Discord-style client prototype"
 license = "MIT"
 
+[lib]
+name = "discord_rust"
+crate-type = ["cdylib", "rlib"]
+
+[[bin]]
+name = "discord-rust"
+path = "src/main.rs"
+
 [dependencies]
-eframe = { version = "0.31", features = ["glow"] }
+eframe = { version = "0.31", features = ["glow", "android-native-activity"] }
 egui = "0.31"
+
+[target.'cfg(target_os = "android")'.dependencies]
+android_logger = "0.15"
+log = "0.4"
+winit = "0.30"
+
+[package.metadata.android]
+package = "com.discord.rust"
+apk_name = "discord-rust"
+build_targets = ["aarch64-linux-android"]
+
+[package.metadata.android.sdk]
+min_sdk_version = 23
+target_sdk_version = 35
+
+[package.metadata.android.application]
+label = "Discord Rust"
