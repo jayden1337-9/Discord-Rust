@@ -38,12 +38,44 @@ jobs:
       - name: Install cargo-apk
         run: cargo install cargo-apk --locked
 
+      - name: Restore or generate release keystore
+        env:
+          ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+        shell: bash
+        run: |
+          if [ -z "$ANDROID_KEYSTORE_PASSWORD" ]; then
+            echo "Missing repository secret: ANDROID_KEYSTORE_PASSWORD"
+            exit 1
+          fi
+
+          if [ -n "$ANDROID_KEYSTORE_BASE64" ]; then
+            printf '%s' "$ANDROID_KEYSTORE_BASE64" | base64 --decode > discord-rust.jks
+            keytool -list -keystore discord-rust.jks -storepass "$ANDROID_KEYSTORE_PASSWORD" >/dev/null
+            echo "Restored the saved release keystore."
+          else
+            keytool -genkeypair -noprompt \
+              -keystore discord-rust.jks \
+              -storetype JKS \
+              -storepass "$ANDROID_KEYSTORE_PASSWORD" \
+              -keypass "$ANDROID_KEYSTORE_PASSWORD" \
+              -alias discord-rust \
+              -keyalg RSA -keysize 2048 -validity 10000 \
+              -dname "CN=Discord Rust, OU=Development, O=Discord Rust, L=Gaborone, S=Gaborone, C=BW"
+            echo "Generated a new release keystore. Save it from the workflow artifact and add its Base64 value as ANDROID_KEYSTORE_BASE64."
+          fi
+
       - name: Build arm64 APK
+        env:
+          CARGO_APK_RELEASE_KEYSTORE: ${{ github.workspace }}/discord-rust.jks
+          CARGO_APK_RELEASE_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
         run: cargo apk build --release --lib
 
-      - name: Upload APK
+      - name: Upload APK and release keystore
         uses: actions/upload-artifact@v4
         with:
-          name: discord-rust-arm64-apk
-          path: target/android-artifacts/release/apk/*.apk
+          name: discord-rust-arm64-build
+          path: |
+            target/android-artifacts/release/apk/*.apk
+            discord-rust.jks
           if-no-files-found: error
