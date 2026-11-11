@@ -37,7 +37,7 @@ jobs:
         run: cargo install cargo-apk --locked
 
       - name: Build arm64 APK
-        run: cargo apk build --release
+        run: cargo apk build --release --lib
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
